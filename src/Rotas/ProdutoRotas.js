@@ -12,6 +12,7 @@ rotas.get('/:id/', ProdutoController.read);
 rotas.get('/promocao', ProdutoController.read);
 
 rotas.use(auth);
+
 rotas.post('/create', ProdutoController.create);
 rotas.put('/update/:id', ProdutoController.update);
 rotas.delete('/delete', ProdutoController.delete);

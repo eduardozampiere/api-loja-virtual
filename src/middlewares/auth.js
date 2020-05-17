@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
 	const [ pre, token ] = parts;
 
 	if(!/^Bearer$/i.test(pre)){
-		return res.status(401).send({msg: "Nenhum mal formatado"});
+		return res.status(401).send({msg: "Token mal formatado"});
 	}
 
 	jwt.verify(token, auth.secret, (err, decoded) => {

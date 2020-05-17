@@ -4,68 +4,59 @@ const Foto = require('../Models/Foto');
 
 class Controller{
 	async create(req, res){
-		const {estoque, produto_pai, cores, tamanhos} = req.body;
+		const variantes = req.body;
 		let data = req.body;
 		let erros = [];
 		let v;
-		var variantes = [];
+		for(let i in variantes){
+			const {estoque, produto_pai, cor_id, tamanho_id} = variantes[i];
+			if(!estoque){
+				data.estoque = 0;
+			}
+	
+			if(!produto_pai){
+				erros.push({
+					mgs: 'Produto inválido.',
+				});
+			}
+			if(!cor_id){
+				erros.push({
+					mgs: 'Selecione uma cor.',
+				});
+			}
+			if(!tamanho_id){
+				erros.push({
+					mgs: 'Selecione um tamanho.',
+				});
+			}
+			if(erros.length > 0){
+				return res.send(erros);
+			}
 
-		if(!estoque){
-			data.estoque = 0;
-		}
-
-		if(!produto_pai){
-			erros.push({
-				mgs: 'Produto inválido.',
-			});
-		}
-		if(!cores){
-			erros.push({
-				mgs: 'Selecione uma cor.',
-			});
-		}
-		if(!tamanhos){
-			erros.push({
-				mgs: 'Selecione um tamanho.',
-			});
-		}
-
-		if(erros.length > 0){
-			return res.send(erros);
-		}
-
-
-		for(let i in cores){
-			let cor_id = cores[i];
-			for(let j in tamanhos){
-				let tamanho_id = tamanhos[j]
-				try{
-					v = await Variante.create({
-						estoque,
-						produto_pai,
-						cor_id,
-						tamanho_id
-					});
-				}
-				catch(err){
-					if(err.name == 'SequelizeForeignKeyConstraintError'){
-						let field = err.fields[0];
-						if(field === 'produto_pai'){
-							return res.send({msg: 'Produto pai inexistente'})
-						}
-						else if(field === 'cor_id'){
-							return res.send({msg: 'Cor inexistente'})	
-						}
-						else if(field === 'tamanho_id'){
-							return res.send({msg: 'Tamanho inexistente'})	
-						}
+			try{
+				v = await Variante.create({
+					estoque,
+					produto_pai,
+					cor_id,
+					tamanho_id
+				});
+			}
+			catch(err){
+				if(err.name == 'SequelizeForeignKeyConstraintError'){
+					let field = err.fields[0];
+					if(field === 'produto_pai'){
+						return res.send({msg: 'Produto pai inexistente'})
+					}
+					else if(field === 'cor_id'){
+						return res.send({msg: 'Cor inexistente'})	
+					}
+					else if(field === 'tamanho_id'){
+						return res.send({msg: 'Tamanho inexistente'})	
 					}
 				}
-				variantes.push(v);
 			}
 		}
-
-		return res.send(variantes);
+		return res.send({ok:true});
 	}
 
 	async delete(req, res){

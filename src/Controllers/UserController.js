@@ -27,22 +27,31 @@ class Controller{
 		user.passwordResetExpires = undefined;
 		user.passwordResetToken = undefined;
 
-		return res.send({ user, token: generateToken({id: user.id}) });
+		let token = generateToken({id: user.id});
+		res.set({'auth': token});
+		
+		return res.send({ user, token: token });
 	}
 
 	async authenticate(req, res){
 		const {email, password} = req.body;
+
 		const user = await User.findOne({
 			where: {
 				email,
 			}
 		});
 
+
 		if(!user){
 			return res.status(400).send({ msg: "Usuario nao encontrado"});
 		}
 
-		if(! await bcrypt.compare(password, user.password)){
+		try{
+			if(! await bcrypt.compare(password, user.password)){
+				return res.status(400).send({ msg: "Senha inválida"});
+			}
+		}catch(err){
 			return res.status(400).send({ msg: "Senha inválida"});
 		}
 
@@ -50,7 +59,10 @@ class Controller{
 		user.passwordResetExpires = undefined;
 		user.passwordResetToken = undefined;
 
-		return res.send({ user, token: generateToken({id: user.id}) });
+		let token = generateToken({id: user.id});
+		res.set({'auth': token});
+		console.log('aaa');
+		return res.send({ user, token:  generateToken({id: user.id})});
 	}
 
 	async forgotPass(req, res){
@@ -82,7 +94,7 @@ class Controller{
 				to: email,
 				from: 'eduardo@company.com',
 				template: 'esqueci_senha',
-				context: {token}
+				context: {token, email}
 			}, err => {
 				if(err){
 					return res.status(400).send({msg: "Houve um erro ao enviar o email. Tente novamente mais tarde."})
@@ -121,6 +133,7 @@ class Controller{
 			user.save();
 
 		}catch(err){
+			console.log(err);
 			return res.status(400).send({msg: 'Houve um erro interno'});
 		}
 		return res.status(200).send({ok: true});
