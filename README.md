@@ -26,4 +26,3 @@ CRUD dos produtos, produtos variantes, categorias de produtos e fotos dos produt
 ![Alt Text](https://github.com/eduardozampiere/api-loja-virtual/blob/master/prints/Captura%20de%20tela%20de%202020-05-17%2000-58-21.png)
 
 ### Cadastro de produtos
-![Alt Text](https://github.com/eduardozampiere/api-loja-virtual/blob/master/prints/Captura%20de%20tela%20de%202020-05-17%2000-58-31.png)
