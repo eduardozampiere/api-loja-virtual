@@ -465,9 +465,25 @@ body{
 }
 
 .promo-check{
-
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    grid-template-rows: 1fr;
+    justify-content: center;
+    align-content: center;
 }
 
+.promo-check > label{
+    justify-self: left;
+    align-self: center;
+}
 .checkbox{
-    
+    justify-self: center;
+}
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: block;
 }

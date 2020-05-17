@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/api';
+import {IoIosCheckboxOutline, IoIosSquareOutline} from 'react-icons/io';
 
 // import { Container } from './styles';
 
@@ -189,6 +190,31 @@ function InserirProduto() {
 		}
 	}
 
+	function check(e){
+		const check = document.getElementsByClassName('icon-check')[0];
+		const uncheck = document.getElementsByClassName('icon-uncheck')[0];
+		const divPromo = document.getElementsByClassName('div-promo')[0];
+		if( check.classList.contains('hide') ){
+			check.classList.remove('hide');
+			check.classList.add('show');
+
+			uncheck.classList.add('hide');
+			uncheck.classList.remove('show');
+
+			divPromo.style.display = 'block';
+		}
+		else{
+			check.classList.add('hide');
+			check.classList.remove('show');
+		
+			uncheck.classList.remove('hide');
+			uncheck.classList.add('show');
+
+			divPromo.style.display = 'none';
+
+		}
+	}
+
 	return (
 		<div>
 			<div className="content-header">
@@ -207,7 +233,9 @@ function InserirProduto() {
 							<input type="file" name="photos[]" placeholder="Selecione as fotos" />
 						</div>
 						<div className="promo-check">
-							<div className="checkbox">
+							<div className="checkbox" onClick={check}>
+								<IoIosCheckboxOutline size={30} className="icon-check hide" />
+								<IoIosSquareOutline size={30} className="icon-uncheck show" />
 							</div>
 							<label form="promo">Promoção</label>
 						</div>
